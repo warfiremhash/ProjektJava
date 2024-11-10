@@ -33,17 +33,35 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    public User(
-            final String firstName,
-            final String lastName,
-            final LocalDate birthdate,
-            final String email) {
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
 
+
+
+    public User(String firstName, String lastName, LocalDate birthdate, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthdate = birthdate;
         this.email = email;
+        this.isActive = true;
     }
 
-}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void deactivate() {
+        this.isActive = false;
+    }
+}
