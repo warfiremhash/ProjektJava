@@ -76,6 +76,10 @@ class UserController {
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+        try {
+            userService.deleteUser(userId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Cannot delete user with ID: " + userId + " due to error: " + e.getMessage());
+        }
     }
 }
