@@ -33,6 +33,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
+
 
 
     public User(String firstName, String lastName, LocalDate birthdate, String email) {
@@ -40,6 +43,7 @@ public class User {
         this.lastName = lastName;
         this.birthdate = birthdate;
         this.email = email;
+        this.isActive = true;
     }
 
     public void setFirstName(String firstName) {
@@ -56,5 +60,8 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public void deactivate() {
+        this.isActive = false;
     }
 }

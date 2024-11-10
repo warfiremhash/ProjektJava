@@ -52,27 +52,27 @@ class UserServiceImpl implements UserService, UserProvider {
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        user.deactivate();
+        userRepository.save(user);
     }
 
     @Override
     public List<User> findAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByIsActiveTrue();
     }
 
     @Override
     public List<User> findUsersByEmailFragment(String emailFragment) {
-        return userRepository.findAll().stream()
+        return userRepository.findAllByIsActiveTrue().stream()
                 .filter(user -> user.getEmail().toLowerCase().contains(emailFragment.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<User> findUsersOlderThan(LocalDate cutoffDate) {
-        return userRepository.findAll().stream()
+        return userRepository.findAllByIsActiveTrue().stream()
                 .filter(user -> user.getBirthdate().isBefore(cutoffDate))
                 .collect(Collectors.toList());
     }

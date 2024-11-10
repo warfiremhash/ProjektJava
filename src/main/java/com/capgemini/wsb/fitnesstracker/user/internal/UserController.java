@@ -2,6 +2,7 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import com.capgemini.wsb.fitnesstracker.user.api.UserDto;
+import com.capgemini.wsb.fitnesstracker.user.api.UserSimpleDto;
 import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,10 @@ class UserController {
     }
 
     @GetMapping("/simple")
-    public List<UserDto> getAllSimpleUsers() {
+    public List<UserSimpleDto> getAllSimpleUsers() {
         return userService.findAllUsers()
                 .stream()
-                .map(user -> new UserDto(user.getId(), user.getFirstName(), user.getLastName(), null, null))
+                .map(userMapper::toSimpleDto)
                 .toList();
     }
 
@@ -46,7 +47,7 @@ class UserController {
     public List<UserDto> getUserByEmail(@RequestParam String email) {
         return userService.findUsersByEmailFragment(email)
                 .stream()
-                .map(user -> new UserDto(user.getId(), null, null, null, user.getEmail()))
+                .map(user -> new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthdate(), user.getEmail()))
                 .toList();
     }
 
