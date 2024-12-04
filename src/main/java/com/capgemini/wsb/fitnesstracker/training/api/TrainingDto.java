@@ -1,50 +1,41 @@
 package com.capgemini.wsb.fitnesstracker.training.api;
 
+import jakarta.annotation.Nullable;
+import lombok.Getter;
+import lombok.Setter;
 import com.capgemini.wsb.fitnesstracker.training.internal.ActivityType;
-import com.capgemini.wsb.fitnesstracker.user.api.User;
-import jakarta.persistence.*;
-import lombok.*;
+import com.capgemini.wsb.fitnesstracker.user.api.UserDto;
 
 import java.util.Date;
-@Entity
-@Table(name = "trainings")
+
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-public class Training {
+public class TrainingDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private UserDto user;
 
-    @Column(name = "start_time", nullable = false)
     private Date startTime;
 
-    @Column(name = "end_time", nullable = false)
     private Date endTime;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "activity_type", nullable = false)
     private ActivityType activityType;
 
-    @Column(name = "distance")
     private double distance;
 
-    @Column(name = "average_speed")
     private double averageSpeed;
 
-    public Training(
-            final User user,
+    public TrainingDto(
+            final Long id,
+            final UserDto user,
             final Date startTime,
             final Date endTime,
             final ActivityType activityType,
             final double distance,
             final double averageSpeed) {
+        this.id = id;
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
