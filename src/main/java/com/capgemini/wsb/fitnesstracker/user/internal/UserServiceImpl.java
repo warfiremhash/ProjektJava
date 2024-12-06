@@ -3,15 +3,12 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import com.capgemini.wsb.fitnesstracker.user.api.UserProvider;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
-import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,40 +37,8 @@ class UserServiceImpl implements UserService, UserProvider {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setBirthdate(user.getBirthdate());
-        return userRepository.save(existingUser);
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        user.deactivate();
-        userRepository.save(user);
-    }
-
-    @Override
     public List<User> findAllUsers() {
-        return userRepository.findAllByIsActiveTrue();
+        return userRepository.findAll();
     }
 
-    @Override
-    public List<User> findUsersByEmailFragment(String emailFragment) {
-        return userRepository.findAllByIsActiveTrue().stream()
-                .filter(user -> user.getEmail().toLowerCase().contains(emailFragment.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<User> findUsersOlderThan(LocalDate cutoffDate) {
-        return userRepository.findAllByIsActiveTrue().stream()
-                .filter(user -> user.getBirthdate().isBefore(cutoffDate))
-                .collect(Collectors.toList());
-    }
 }
